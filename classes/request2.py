@@ -328,7 +328,7 @@ class Requester(object):
                 # a '200', request the resource with a 'GET'
                 get_resource = True
                 if can_use_head:
-                    response = self.do_request(complete_url, run_type, method=u'HEAD')
+                    response = self.do_request(complete_url,run_type=run_type, method=u'HEAD')
                     if not response.status_code == 200:
                         get_resource = False
 
