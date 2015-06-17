@@ -329,7 +329,7 @@ class Requester(object):
                 get_resource = True
                 if can_use_head:
                     response = self.do_request(complete_url, run_type, method=u'HEAD')
-                    if not response.code == 200:
+                    if not response.status_code == 200:
                         get_resource = False
 
                 # Fetch the ressource if the resource exists or
