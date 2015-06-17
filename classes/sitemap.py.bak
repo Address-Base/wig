@@ -8,13 +8,13 @@ class Sitemap(object):
 		#self.create_tree()
 		#self._recurse(self.sitemap, '')
 
-		return u'\n'.join(sorted(list(set(self.urls)))) 
+		return '\n'.join(sorted(list(set(self.urls)))) 
 
 	def add(self, url):
 		self.urls.append(url)
 
 	def create_tree(self):
-		for url in [i.split(u'/') for i in list(set(self.urls))]:
+		for url in [i.split('/') for i in list(set(self.urls))]:
 			current_level = self.sitemap
 			for part in url[1:]:
 				if part not in current_level:
@@ -25,8 +25,8 @@ class Sitemap(object):
 
 	def _recurse(self, dictionary, space):
 		for key in dictionary:
-			if key == u'': continue
-			print space + key
+			if key == '': continue
+			print(space + key)
 
 			if not dictionary[key] == {}:
-				self._recurse(dictionary[key], space + u'  ')
+				self._recurse(dictionary[key], space + '  ')
