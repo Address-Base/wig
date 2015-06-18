@@ -5,10 +5,10 @@ import hashlib
 import re
 import string
 import random
-import urllib2, urllib
+import urllib2
+import requests
 from urlparse import urlparse, urlunparse, urljoin
 from HTMLParser import HTMLParser
-import requests
 
 class HTMLStripper(HTMLParser):
     def __init__(self):
@@ -117,8 +117,8 @@ class RedirectHandler(urllib2.HTTPRedirectHandler):
 
     def http_error_302(self, req, fp, code, msg, headers):
         if u'location' in headers:
-            org_url = urllib.request.urlparse(req.get_full_url())
-            new_url = urllib.request.urlparse(headers[u'location'])
+            org_url = urlparse(req.get_full_url())
+            new_url = urlparse(headers[u'location'])
 
             # if the location starts with '/' the path is relative
             if headers[u'location'].startswith(u'/'):

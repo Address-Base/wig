@@ -253,7 +253,7 @@ class DiscoverSubdomains(object):
 
             # try to get the title of the site hosted on the domain
             try:
-                req = requests.get(scheme + u'://' + domain)
+                req = requests.get(url=scheme + u'://' + domain, timeout=1)
                 data = req.content.decode(u'utf-8')
                 title = re.findall(ur'<title>\s*(.*)\s*</title>', data)[0].strip()
                 if len(title) > 50:
