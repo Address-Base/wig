@@ -7,8 +7,8 @@ from __future__ import with_statement
 from __future__ import absolute_import
 import re
 import socket
-import urllib
-import urllib2, urllib
+import requests
+from urlparse import urlparse
 from collections import Counter, defaultdict
 from HTMLParser import HTMLParser
 from itertools import imap
@@ -238,7 +238,7 @@ class DiscoverSubdomains(object):
         self.url = options[u'url']
         self.printer = data[u'printer']
 
-        self.domain = urllib2.urlparse.urlparse(self.url).netloc
+        self.domain = urlparse(self.url).netloc
         self.domain = u'.'.join(self.domain.split(u':')[0].split(u'.')[-2:])
 
         self.random_domain = u'random98f092f0b7'
@@ -253,14 +253,14 @@ class DiscoverSubdomains(object):
 
             # try to get the title of the site hosted on the domain
             try:
-                req = urllib2.Request(url=scheme + u'://' + domain)
-                with urllib2.urlopen(req, timeout=1) as f:
-                    data = f.read().decode(u'utf-8')
-                    title = re.findall(ur'<title>\s*(.*)\s*</title>', data)[0].strip()
-                    if len(title) > 50:
-                        title =  title[:47] + u' ...'
+                req = requests.get(scheme + u'://' + domain)
+                data = req.content.decode(u'utf-8')
+                title = re.findall(ur'<title>\s*(.*)\s*</title>', data)[0].strip()
+                if len(title) > 50:
+                    title =  title[:47] + u' ...'
 
-                    result = (scheme + u'://' + domain + u":" + port, title, ip)
+                result = (scheme + u'://' + domain + u":" + port, title, ip)
+
             except:
                 result = None
         except:
@@ -526,7 +526,7 @@ class DiscoverMore(object):
                 tmp = tmp.union(parser.get_results())
 
                 for i in tmp:
-                    url_data = urllib.request.urlparse(i)
+                    url_data = urlparse(i)
 
                     # skip data urls
                     if url_data.path.startswith(u'data:'): continue
@@ -786,7 +786,7 @@ class DiscoverUrlLess(object):
                     matches = self.matcher.get_result(fps, response)
                     for fp in matches:
 
-                        url_data = urllib.request.urlparse(response.get_url())
+                        url_data = urlparse(response.get_url())
                         fp[u'url'] = url_data.path
 
                         show_all_detections = True
