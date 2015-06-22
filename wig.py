@@ -136,7 +136,7 @@ class Wig(object):
         #
         try:
             is_redirected, new_url = self.data[u'requester'].detect_redirect()
-        except UnknownHostName, err:
+        except UnknownHostName as err:
             self.data[u'printer'].print_debug_line(err, 1)
 
             # fix for issue 8: https://github.com/jekyc/wig/issues/8
@@ -147,23 +147,28 @@ class Wig(object):
 
             return
 
-        if is_redirected:
-            if not self.options[u'quiet']:
-                self.data[u'printer'].build_line(u"Redirected to ")
-                self.data[u'printer'].build_line(new_url, color=u'red')
-                self.data[u'printer'].print_built_line()
-                choice = raw_input(u"Continue? [Y|n]:")
-            else:
-                choice = u'Y'
 
-            # if not, exit
-            if choice in [u'n', u'N']:
-                sys.exit(1)
-            # else update the host
-            else:
-                self.options[u'url'] = new_url
-                self.data[u'requester'].url = new_url
+            if is_redirected:
+                if not self.options[u'quiet']:
+                    self.data[u'printer'].build_line(u"Redirected to ")
+                    self.data[u'printer'].build_line(new_url, color=u'red')
+                    self.data[u'printer'].print_built_line()
 
+                    # raw_input was renamed in py3 from raw_input to input
+                    if sys.version_info.major == 3:
+                        choice = input(u"Continue? [Y|n]:")
+                    elif sys.version_info.major == 2:
+                        choice = raw_input(u"Continue?[Y|n]:")
+                else:
+                    choice = u'Y'
+
+                # if not, exit
+                if choice in [u'n', u'N']:
+                    sys.exit(1)
+                # else update the host
+                else:
+                    self.options[u'url'] = new_url
+                    self.data[u'requester'].url = new_url
 
         #
         # --- PREP ------------------------------
@@ -318,10 +323,10 @@ class Wig(object):
 def parse_args(url=None):
     parser = argparse.ArgumentParser(description=u'WebApp Information Gatherer')
 
-    parser.add_argument(u'url', nargs=u'?', type=unicode, default=None,
+    parser.add_argument(u'url', nargs=u'?', type=str, default=None,
         help=u'The url to scan e.g. http://example.com')
 
-    parser.add_argument(u'-l', type=unicode, default=None, dest=u"input_file",
+    parser.add_argument(u'-l', type=str, default=None, dest=u"input_file",
         help=u'File with urls, one per line.')
 
     parser.add_argument(u'-q', action=u'store_true', dest=u'quiet', default=False,
