@@ -446,7 +446,7 @@ class LinkExtractor(HTMLParser):
     """
 
     def __init__(self, strict):
-        #  super(LinkExtractor, self).__init__(strict=strict)
+        HTMLParser.__init__(self)
         self.strict = strict
         self.results = set()
 
