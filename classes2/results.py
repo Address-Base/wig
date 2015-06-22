@@ -1,3 +1,5 @@
+from __future__ import division
+from __future__ import absolute_import
 from collections import defaultdict, Counter
 
 from classes.sitemap import Sitemap
@@ -27,10 +29,10 @@ class Results(object):
 		self.sitemap = Sitemap()
 		
 		self.site_info = {
-			'ip': '',
-			'title': '',
-			'cookies': set(),
-			'subdomains': set(),
+			u'ip': u'',
+			u'title': u'',
+			u'cookies': set(),
+			u'subdomains': set(),
 		}
 
 	def _calc_md5_score(self):
@@ -49,37 +51,37 @@ class Results(object):
 
 	
 	def add(self, category, name, version=None, fingerprint=None, weight=1):
-		url = ''
-		match_type = ''
+		url = u''
+		match_type = u''
 
 		if fingerprint is not None:
-			match_type = fingerprint['type']
+			match_type = fingerprint[u'type']
 
 			# overwrite weight if defined in fingerprint
-			if 'weight' in fingerprint:
-				weight = fingerprint['weight']
+			if u'weight' in fingerprint:
+				weight = fingerprint[u'weight']
 
 			# add to the sitemap
-			if 'url' in fingerprint:
-				self.sitemap.add(fingerprint['url'])
-				url = fingerprint['url']
+			if u'url' in fingerprint:
+				self.sitemap.add(fingerprint[u'url'])
+				url = fingerprint[u'url']
 			else:
-				url = ''
+				url = u''
 
 			# add note if present
-			if 'note' in fingerprint:
-				note = fingerprint['note']
-				self.printer.print_debug_line('- %s: %s' % (note, url), 5)
-				self.scores["interesting"][url][note] += weight
+			if u'note' in fingerprint:
+				note = fingerprint[u'note']
+				self.printer.print_debug_line(u'- %s: %s' % (note, url), 5)
+				self.scores[u"interesting"][url][note] += weight
 
-		self.printer.print_debug_line('- Found match: %s - %s %s - %s' % (url, name, version, match_type), 5)
+		self.printer.print_debug_line(u'- Found match: %s - %s %s - %s' % (url, name, version, match_type), 5)
 
 		#print(category, name, version, weight)
 		# if the type of the fingerprint is md5, then the we need 
 		# to keep track of how many cms versions have been detected 
 		# the a given URL, as this determines the weight score of
 		# fingerprint match
-		if match_type == 'md5':
+		if match_type == u'md5':
 			self.md5_matches[url][(category, name)][version] += 1
 
 		# if there has been no version detection (interesting file discovery)
@@ -89,7 +91,7 @@ class Results(object):
 
 		# if the version is blank or true, add '0' to 
 		# set it to the worst match
-		elif version == '' or version == True:
+		elif version == u'' or version == True:
 			self.scores[category][name][version] += 0
 
 		# else add the weight
@@ -112,7 +114,7 @@ class Results(object):
 				versions = sorted(v.items(), key=lambda x:x[1], reverse=True)
 
 				# if the highest rated version is blank, move it to the end of the list
-				if versions[0][0] == '':
+				if versions[0][0] == u'':
 					versions = versions[1:] + [versions[0]]
 
 				relevant = sorted(i[0] for i in versions if i[1] == versions[0][1])
@@ -122,27 +124,27 @@ class Results(object):
 
 
 	def add_vulnerabilities(self, cms, version, num_vuln, link):
-		if 'vulnerability' not in self.results: self.results['vulnerability'] = {}
-		self.results['vulnerability'][(cms,version)] = {'col2': num_vuln, 'col3': link}
+		if u'vulnerability' not in self.results: self.results[u'vulnerability'] = {}
+		self.results[u'vulnerability'][(cms,version)] = {u'col2': num_vuln, u'col3': link}
 
 
 	def add_tool(self, cms, tool_name, tool_link):
-		if 'tool' not in self.results:
-			self.results['tool'] = {}
+		if u'tool' not in self.results:
+			self.results[u'tool'] = {}
 		
-		self.results['tool'][tool_name] = {'col2': cms, 'col3': tool_link}
+		self.results[u'tool'][tool_name] = {u'col2': cms, u'col3': tool_link}
 
 
 	def add_subdomain(self, subdomain, title, ip):
-		if 'subdomains' not in self.results:
-			self.results['subdomains'] = {}		
+		if u'subdomains' not in self.results:
+			self.results[u'subdomains'] = {}		
 
-		self.results['subdomains'][subdomain] = {'col2': title, 'col3': ip}
+		self.results[u'subdomains'][subdomain] = {u'col2': title, u'col3': ip}
 
 
 	def get_versions(self):
 		versions = []
-		for cat in ['cms', 'javascript', 'os', 'platform']:
+		for cat in [u'cms', u'javascript', u'os', u'platform']:
 			if cat not in self.results: continue
 			for cms in self.results[cat]:
 				for version in self.results[cat][cms]:
@@ -152,11 +154,11 @@ class Results(object):
 
 
 	def get_sitemap(self):
-		return str(self.sitemap)
+		return unicode(self.sitemap)
 
 
 	def get_platform_results(self):
-		return self.scores['platform']
+		return self.scores[u'platform']
 
 
 	def get_results(self):

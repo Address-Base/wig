@@ -28,19 +28,46 @@ and version.
 
 from __future__ import with_statement
 from __future__ import absolute_import
-import time, Queue, sys, argparse
-from classes.cache import Cache
-from classes.results import Results
-from classes.fingerprints import Fingerprints
-from classes.discovery import *
-from classes.headers import ExtractHeaders
-from classes.matcher import Match
-from classes.printer import Printer
-from classes.output import OutputPrinter
-from classes.output import OutputJSON
-from classes.request2 import Requester
-from classes.request2 import UnknownHostName
+
+# version specific Modules
+# version specific Modules
+import sys
+import argparse
+import time
+
 from io import open
+
+# version specific Modules
+if sys.version_info.major == 3:
+
+    import queue
+    from classes.cache import Cache
+    from classes.results import Results
+    from classes.fingerprints import Fingerprints
+    from classes.discovery import *
+    from classes.headers import ExtractHeaders
+    from classes.matcher import Match
+    from classes.printer import Printer
+    from classes.output import OutputPrinter
+    from classes.output import OutputJSON
+    from classes.request2 import Requester
+    from classes.request2 import UnknownHostName
+
+
+elif sys.version_info.major == 2:
+
+    import Queue as queue
+    from classes2.cache import Cache
+    from classes2.results import Results
+    from classes2.fingerprints import Fingerprints
+    from classes2.discovery import *
+    from classes2.headers import ExtractHeaders
+    from classes2.matcher import Match
+    from classes2.printer import Printer
+    from classes2.output import OutputPrinter
+    from classes2.output import OutputJSON
+    from classes2.request2 import Requester
+    from classes2.request2 import UnknownHostName
 
 
 
@@ -90,7 +117,7 @@ class Wig(object):
             u'printer': text_printer,
             u'detected_cms': set(),
             u'error_pages': set(),
-            u'requested': Queue.Queue()
+            u'requested': queue.Queue()
         }
 
         if self.options[u'write_file'] is not None:
