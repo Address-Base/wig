@@ -70,7 +70,10 @@ def _create_response(response):
     R.host = response_info.netloc
     R.url = url
     R.status = {u'code': response.status_code, u'text': response.reason}
-    R.headers = dict((pair[0].lower(), pair[1]) for pair in response.headers)
+    # R.headers = dict((pair[0].lower(), pair[1]) for pair in response.headers)
+    for key, value in response.headers.iteritems():
+        R.headers[key] = value
+
     R.md5 = hashlib.md5(body).hexdigest().lower()
     R.md5_404 = _clean_page(body)
     R.md5_404_text = _clean_page(page_text.encode(u'utf-8', u'ignore'))
@@ -285,11 +288,8 @@ class Requester(object):
         return (self.is_redirected, new_loc)
 
     def do_request(self, url, run_type=None, method=u'GET'):
-        # opener = self._create_fetcher()
-        # response = opener.open(request)
         response = requests.request(url=url, method=method)
         R = _create_response(response)
-
         if run_type == u'DiscoverMore':
             R.crawled_response = True
 
