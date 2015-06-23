@@ -30,44 +30,35 @@ from __future__ import with_statement
 from __future__ import absolute_import
 
 # version specific Modules
-# version specific Modules
 import sys
 import argparse
 import time
 
 from io import open
 
+from classes.cache import Cache
+from classes.results import Results
+from classes.fingerprints import Fingerprints
+from classes.headers import ExtractHeaders
+from classes.matcher import Match
+from classes.printer import Printer
+from classes.output import OutputPrinter
+from classes.output import OutputJSON
+
 # version specific Modules
 if sys.version_info.major == 3:
 
     import queue
-    from .classes.cache import Cache
-    from .classes.results import Results
-    from .classes.fingerprints import Fingerprints
-    from .classes.discovery import *
-    from .classes.headers import ExtractHeaders
-    from .classes.matcher import Match
-    from .classes.printer import Printer
-    from .classes.output import OutputPrinter
-    from .classes.output import OutputJSON
-    from .classes.request2 import Requester
-    from .classes.request2 import UnknownHostName
-
+    from classes.discovery import *
+    from classes.request2 import Requester
+    from classes.request2 import UnknownHostName
 
 elif sys.version_info.major == 2:
 
     import Queue as queue
-    from .classes2.cache import Cache
-    from .classes2.results import Results
-    from .classes2.fingerprints import Fingerprints
-    from .classes2.discovery import *
-    from .classes2.headers import ExtractHeaders
-    from .classes2.matcher import Match
-    from .classes2.printer import Printer
-    from .classes2.output import OutputPrinter
-    from .classes2.output import OutputJSON
-    from .classes2.request2 import Requester
-    from .classes2.request2 import UnknownHostName
+    from classes2.discovery import *
+    from classes2.request2 import Requester
+    from classes2.request2 import UnknownHostName
 
 
 
@@ -389,7 +380,7 @@ def wig(**kwargs):
     u"""
         Use this to call wig from python:
 
-        >>>> from wig import wig
+        >>>> from import wig
         >>>> w = wig(url='example.com')
         >>>> w.run()
         >>>> results = w.get_results()

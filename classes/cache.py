@@ -1,4 +1,10 @@
-import queue
+import sys
+
+if sys.version_info.major == 3:
+    import queue
+elif sys.version_info.major == 2:
+    import Queue as queue
+
 import pickle
 import os
 import time
