@@ -57,17 +57,17 @@ if sys.version_info.major == 3:
 elif sys.version_info.major == 2:
 
     import Queue as queue
-    from classes2.cache import Cache
-    from classes2.results import Results
-    from classes2.fingerprints import Fingerprints
-    from classes2.discovery import *
-    from classes2.headers import ExtractHeaders
-    from classes2.matcher import Match
-    from classes2.printer import Printer
-    from classes2.output import OutputPrinter
-    from classes2.output import OutputJSON
-    from classes2.request2 import Requester
-    from classes2.request2 import UnknownHostName
+    from .classes2.cache import Cache
+    from .classes2.results import Results
+    from .classes2.fingerprints import Fingerprints
+    from .classes2.discovery import *
+    from .classes2.headers import ExtractHeaders
+    from .classes2.matcher import Match
+    from .classes2.printer import Printer
+    from .classes2.output import OutputPrinter
+    from .classes2.output import OutputJSON
+    from .classes2.request2 import Requester
+    from .classes2.request2 import UnknownHostName
 
 
 
