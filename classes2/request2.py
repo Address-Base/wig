@@ -237,21 +237,6 @@ class Requester(object):
             self.url_data.path = options[u'prefix'] + self.url_data.path
         self.url = urlunparse(self.url_data)
 
-    def _create_fetcher(self, redirect_handler=True):
-        args = [ErrorHandler]
-        if self.proxy == None:
-            args.append(urllib2.ProxyHandler({}))
-        elif not self.proxy == False:
-            protocol = self.url_data.scheme
-            args.append(urllib2.ProxyHandler({protocol: self.proxy}))
-
-        if redirect_handler:
-            args.append(RedirectHandler)
-
-        opener = urllib2.build_opener(*args)
-        opener.addheaders = [(u'User-agent', self.user_agent)]
-        return opener
-
     def detect_redirect(self):
         parse = urlparse
 

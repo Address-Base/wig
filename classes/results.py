@@ -1,6 +1,6 @@
 from collections import defaultdict, Counter
 
-from .sitemap import Sitemap
+from classes.sitemap import Sitemap
 
 
 class Results(object):
