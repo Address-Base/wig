@@ -2,13 +2,21 @@
 Collection of classes to extract information from the site.
 
 """
-
+import sys
 import re
 import socket
-import urllib
-import urllib.request
+
+if sys.version_info.major == 3:
+    import urllib.request as urllib2
+    from urllib.request import urlparse
+    from html.parser import HTMLParser
+
+elif sys.version_info.major == 2:
+    import urllib2
+    from urlparse import urlparse
+    from HTMLParser import HTMLParser
+
 from collections import Counter, defaultdict
-from html.parser import HTMLParser
 
 class DiscoverAllCMS:
     """
@@ -235,7 +243,7 @@ class DiscoverSubdomains:
         self.url = options['url']
         self.printer = data['printer']
 
-        self.domain = urllib.request.urlparse(self.url).netloc
+        self.domain = urlparse(self.url).netloc
         self.domain = '.'.join(self.domain.split(':')[0].split('.')[-2:])
 
         self.random_domain = 'random98f092f0b7'
@@ -250,8 +258,8 @@ class DiscoverSubdomains:
 
             # try to get the title of the site hosted on the domain
             try:
-                req = urllib.request.Request(url=scheme + '://' + domain)
-                with urllib.request.urlopen(req, timeout=1) as f:
+                req = urllib2.Request(url=scheme + '://' + domain)
+                with urllib2.urlopen(req, timeout=1) as f:
                     data = f.read().decode('utf-8')
                     title = re.findall(r'<title>\s*(.*)\s*</title>', data)[0].strip()
                     if len(title) > 50:
@@ -442,8 +450,8 @@ class LinkExtractor(HTMLParser):
     Only checks for img, script, and link tags
     """
 
-    def __init__(self, strict):
-        super().__init__(strict=strict)
+    def __init__(self):
+        HTMLParser.__init__(self)
         self.results = set()
 
     def get_results(self):
@@ -502,7 +510,7 @@ class DiscoverMore(object):
     def run(self):
         self.printer.print_debug_line('Detecting links ...', 1)
         resources = set()
-        parser = LinkExtractor(strict=False)
+        parser = LinkExtractor()
 
         for req in self.cache.get_responses():
             # skip pages that do not set 'content-type'
@@ -522,7 +530,7 @@ class DiscoverMore(object):
                 tmp = tmp.union(parser.get_results())
 
                 for i in tmp:
-                    url_data = urllib.request.urlparse(i)
+                    url_data = urlparse(i)
 
                     # skip data urls
                     if url_data.path.startswith('data:'): continue
@@ -781,7 +789,7 @@ class DiscoverUrlLess:
                     matches = self.matcher.get_result(fps, response)
                     for fp in matches:
 
-                        url_data = urllib.request.urlparse(response.get_url())
+                        url_data = urlparse(response.get_url())
                         fp['url'] = url_data.path
 
                         show_all_detections = True

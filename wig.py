@@ -43,21 +43,21 @@ from classes.matcher import Match
 from classes.printer import Printer
 from classes.output import OutputPrinter
 from classes.output import OutputJSON
+from classes.discovery import *
+
+from classes.request2 import Requester
+from classes.request2 import UnknownHostName
+
+
 
 # version specific Modules
 if sys.version_info.major == 3:
 
     import queue
-    from classes.discovery import *
-    from classes.request2 import Requester
-    from classes.request2 import UnknownHostName
 
 elif sys.version_info.major == 2:
 
     import Queue as queue
-    from classes2.discovery import *
-    from classes2.request2 import Requester
-    from classes2.request2 import UnknownHostName
 
 
 
